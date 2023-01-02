@@ -1,0 +1,103 @@
+#include <iostream>
+#include <string.h>
+using namespace std;
+#define STACKSIZE 20
+#define TRUE 1
+#define FALSE 0
+struct stack
+{
+ char items[STACKSIZE];
+ int TOP;
+};
+struct stack S;
+ int Initialize()
+{
+    S.TOP = -1;
+}
+int IsEmpty() 
+{
+if (S.TOP == -1)
+return TRUE;
+else
+return FALSE;
+}
+
+void PUSH(char x)
+{
+    if( S.TOP == STACKSIZE - 1)
+    {
+        printf("stack overflows");
+        exit(1);
+    }
+    S.TOP = S.TOP + 1;
+    S.items[S.TOP]=x;
+
+}
+int POP()
+{
+    int x;
+     if (S.TOP == -1)
+     {
+        printf("underflows");
+        exit(1);
+     }
+     x = S.items[S.TOP];
+     S.TOP = S.TOP - 1;
+     return x;   
+}
+int stackTOP()
+{
+    int x = S.items[S.TOP];
+    return x;
+}
+int evaluation(int a, int b, char op)
+{
+    switch (op)
+    {
+    case '+':
+        return a + b;
+        break;
+    case '-':
+        return a - b;
+        break;
+    case '*':
+        return a * b;
+        break;
+    case '/':
+        return a / b;
+        break;
+    }
+}
+
+int prefixevaluation(char prefixEXP[20])
+{
+    int i=0,x;
+    char symbol;
+    while(prefixEXP[i]!='\0')
+    {
+        int a,b,value;
+        symbol = prefixEXP[i];
+        if(symbol>='0' && symbol<='9')
+        PUSH(symbol - '0');
+        else
+        {
+          a = POP();
+          b = POP();
+          value = evaluation(a,b,symbol);
+          PUSH(value);
+        }
+        i++;
+    }
+    x = POP();
+    return x;
+}
+int main()
+{
+    char prefix[20];
+    cin>>prefix;
+    Initialize();
+    strrev(prefix);
+    cout<<prefix<<" "<<endl;
+    int x = prefixevaluation(prefix);
+    cout<<x;
+}
